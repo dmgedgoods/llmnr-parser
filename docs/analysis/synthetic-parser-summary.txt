@@ -1,0 +1,3 @@
+frame 4: llmnr: answer 1 at offset 20: llmnr: short record data at offset 34: got 3 bytes, need 4
+frames=5 llmnr=4 failures=1 other_decode_errors=0
+1 port-5355 packets could not be decoded

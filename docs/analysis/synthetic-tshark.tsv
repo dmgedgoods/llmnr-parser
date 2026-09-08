@@ -1,0 +1,6 @@
+frame.number	_ws.col.protocol	_ws.col.info	ip.checksum.status	udp.checksum.status	dns.count.answers	dns.count.auth_rr	dns.count.add_rr
+1	LLMNR	Standard query response 0x1001 AAAA g1 SOA g1	1	1	0	1	0
+2	LLMNR	Standard query 0x1002 A g1 OPT		1	0	0	1
+3	LLMNR	Standard query 0x1003 A g1 A 192.0.2.2	1	1	0	0	1
+4	LLMNR	Standard query response 0x1004 A g1 A[Malformed Packet]		1	1	0	0
+5	LLMNR	Standard query response 0x1005 AAAA g1 AAAA fe80::2		1	1	0	0

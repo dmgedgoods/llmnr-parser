@@ -1,0 +1,11 @@
+# gopacket integration
+
+Selected the original github.com/google/gopacket v1.1.19 for the assessment and pinned it. Both that module and the gopacket/gopacket fork were present locally; inspected their upstream repositories and the original module's UDP dispatch and registration source. This is a reproducibility choice, not a claim that the original is the newest or maintained implementation. Sources: https://github.com/google/gopacket and https://github.com/gopacket/gopacket.
+
+Layer wraps the existing Message decoder, implements gopacket layer/application/decoding interfaces, clears state on reuse and publishes a layer only after successful decoding. RegisterUDP explicitly registers port 5355 before decoding; it is not an import-time port override. Layer ID 2001 is application-defined and globally registered. A short header sets truncated feedback; other decode errors are returned but not all mark the gopacket truncated flag. The Layer's wire Contents follow gopacket's input-buffer lifetime, while parsed record data owns its bytes.
+
+The command reads PCAP with pcapgo and emits JSON per matching UDP packet. It checks both UDP source and destination ports, reports errors and continues to collect findings, returning failure if any matching traffic was not decoded. Underlying UDP dispatch prioritizes destination port; competing application mappings can prevent response dispatch, which the command reports. TCP and IP fragment reassembly remain unimplemented. See README for limitations.
+
+Validation: go test ./... passed, including an actual PCAP integration test checking all expected frame numbers, 610 total frames, 4 IPv4/4 IPv6 messages, IDs, questions, addresses, TTLs and application-layer registration. Malformed-layer and reuse tests passed. go mod tidy, go vet and command execution initially hit external Go cache access restrictions; reran with approved escalation and completed successfully. Saving evidence required a second approved cache-access attempt.
+
+Saved command result: frames=610 llmnr=8 failures=0 other_decode_errors=0. Compared the eight saved JSON rows with the TShark TSV using PowerShell: frame numbers, endpoints, ports, transaction IDs, question name/type and response addresses/TTLs all matched. The PCAP itself was not changed. Full RFC coverage remains a separate task.
